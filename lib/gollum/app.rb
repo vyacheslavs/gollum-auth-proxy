@@ -47,6 +47,41 @@ Gollum::Filter::Code.language_handlers[/mermaid/] = Proc.new { |lang, code| "<di
 
 module Precious
 
+  class ProxyAuth
+    def initialize
+      @mg = Rack::Builder.new do
+        map "/" do
+          run Precious::App
+        end
+      end
+    end
+
+    def call(env)
+      request = Rack::Request.new(env)
+      _email = request.get_header('HTTP_X_FORWARDED_USER')
+      _user = request.get_header('HTTP_X_FORWARDED_USERNAME')
+      if _user.to_s == ''
+        _user = "Undisclosed"
+      end
+      if _email.to_s == ''
+        return not_authorized
+      end
+      request.session['gollum.author'] = { name: _user, email: _email }
+      @mg.call(env)
+    end
+
+    def not_authorized
+      [
+        401,
+        {
+          'Content-Type'     => 'text/plain',
+        },
+        [ 'Not authorized' ]
+      ]
+    end
+
+  end
+
   # For use with the --base-path option.
   class MapGollum
     def initialize(base_path)

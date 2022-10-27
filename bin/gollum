@@ -291,7 +291,8 @@ else
   base_path = wiki_options[:base_path]
 
   if base_path.nil?
-    Precious::App.run!(options)
+    # Precious::App.run!(options)
+    Rack::Server.new(:app => Precious::ProxyAuth.new, :Port => options[:port], :Host => options[:bind]).start
   else
     require 'rack'
 

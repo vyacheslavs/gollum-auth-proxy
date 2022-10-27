@@ -11,6 +11,8 @@ See the [wiki](https://github.com/gollum/gollum/wiki) for extensive documentatio
 
 ## DESCRIPTION
 
+### This fork of golumn does not work without X-Forwarded-User header. This fork is to be used under reverse proxy with some forward authentication
+
 Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository of a specific nature:
 
 * A Gollum repository's contents are human-editable text or markup files.
