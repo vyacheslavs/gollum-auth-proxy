@@ -58,8 +58,9 @@ module Precious
 
     def call(env)
       request = Rack::Request.new(env)
-      _email = request.get_header('HTTP_X_FORWARDED_USER')
-      _user = request.get_header('HTTP_X_FORWARDED_USERNAME')
+
+      _email = request.get_header('HTTP_REMOTE_EMAIL')
+      _user = request.get_header('HTTP_REMOTE_NAME')
       if _user.to_s == ''
         _user = "Undisclosed"
       end
